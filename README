@@ -1,4 +1,288 @@
-Etapa 3 proiect PP - Frant Madalina 324CB 
+-- TASK SET 1 --
+
+Functiile string_to_int si string_to_float transforma un String dat ca 
+parametru intr-un Int, respectiv Float, apeland corespunzator functia read.
+
+
+- Task 1:
+
+Functia compute_average_steps aplica prin intermediul functiei map functia 
+average_steps_row pe fiecare linie a matricei date ca parametru (pe tail de 
+aceasta deoarece nu se aplica pe prima linie, corespunzatoare titlului), apoi 
+concateneaza la inceputul acesteia titlul ["Name", "Average Number of Steps"],
+pentru a obtine numarul mediu de pasi pe ora al tuturor persoanelor.
+
+Functia average_steps_row prelucreaza un rand astfel: pastreaza primul element, 
+corespunzator numelui (head r), urmatorul element de pe linie devenind media 
+celor 8 ore, calculata cu ajutorul functiei gen_average_steps. 
+
+Functia gen_average_steps calculeaza media elementelor de pe un rand primit 
+ca parametru (primeste ca parametru si un Int reprezentand numarul de elemente
+de pe rand); rezultatul este returnat sub forma unui String. 
+
+
+- Task 2: 
+
+Functia get_passed_people_num calculeaza numarul de persoane care au acumulat 
+minim 1000 de pasi in cele 8 ore aplicand functia foldr cu o functie parametru 
+corespunzatoare pe matricea data transformata in lista de pasi totali prin 
+intermediul functiei get_daily_steps.
+
+Functia get_daily_steps aplica prin intermediul functiei map functia 
+gen_daily_steps pe fiecare linie a matricei date ca parametru (tail - fara 
+titlu).
+
+Functia gen_daily_steps calculeaza pentru un rand suma tuturor pasilor in 
+cele 8 ore si intoarce aceasta suma (tail r - fara coloana corespunzatoare 
+numelui).
+
+Functia get_passed_people_percentage calculeaza procentul persoanelor care au 
+acumulat cel putin 1000 de pasi in cele 8 ore, impartind numarul celor care au 
+realizat acest lucru (obtinut prin functia get_passed_people_num) la numarul 
+total de persoane (lungimea matricei = (numarul de linii - 1) - fara titlu).
+
+Functia get_steps_avg calculeaza numarul mediu de pasi zilnici, apeland functia 
+get_daily_steps pentru a genera numarul total de pasi ce va fi apoi impartit la 
+numarul de persoane (length m - 1).
+
+
+- Task 3:
+
+Functia get_avg_steps_per_h aplica prin intermediul functiei map functia 
+average_steps_hour_row pe fiecare linie a matricei date ca parametru (pe tail 
+de aceasta transpusa - pentru a obtine fiecare rand corespunzator unei ore), 
+apoi concateneaza la inceputul acesteia titlul corespunzator pentru a obtine 
+numarul mediu de pasi pentru fiecare ora. 
+
+Functia average_steps_hour_row calculeaza numarul mediu de pasi pentru o 
+ora aplicand functia gen_average_steps pe randul dat ca parametru (pe tail r 
+- fara primul element reprezentand ora); al doilea parametru reprezentand 
+numarul de elemente va fi length r - 1.
+
+
+- Task 4:
+
+Functia get_activ_summary genereaza un tabel cu coloanele ["range1", "range2", "range3"]
+si randurile "VeryActiveMinutes", "FairlyActiveMinutes", "LightlyActiveMinutes" 
+ce va reprezenta numarul de persoane care au petrecut un numar de minute aflat
+in intervalul corespunzator, la intensitatea corespunzatoare. Astfel, tabelul 
+va fi format din randurile: title_ranges (titlul) si gen_rowi (i = 1, 2, 3) 
+(randurile corespunzatoare celor 3 intensitati). 
+
+Functia is_in_range verifica daca un numar dat x apartine intervalului [a, b)
+(a, b date de asemenea ca parametru).
+
+Functia count_in_range numara pentru un rand cate elemente se afla in intervalul 
+determinat de a, b date ca parametru, utilizand functia foldr si functia 
+is_in_range pentru a verifica apartenenta la interval. 
+
+Functia count_for_range primeste ca parametru matricea data, un index i si 
+capetele intervalului a, b. Aceasta intoarce, sub forma unui String, numarul 
+de persoane de pe randul corespunzator intensitatii care au petrecut un numar
+de minute aflat in intervalul [a, b). 
+
+Functia gen_row genereaza randul corespunzator unei intensitati, primind ca 
+parametru matricea data, un String si un index pentru randul corespunzator 
+intensitatii. Astfel, randul va fi format din String-ul dat (tipul intensitatii) 
+si numarul de persoane ce indeplinesc conditia enuntata pentru cele 3 intervale.
+
+Functiile gen_rowi (i = 1, 2, 3) genereaza fiecare rand pentru cele 3 
+intensitati, apeland functia gen_row cu String-ul si indexul corespunzator 
+pe matricea transpusa (pentru a obtine randuri cu intensitatile date). 
+
+
+- Task 5:
+
+Functia get_ranking sorteaza matricea data dupa numarul de pasi, respectiv 
+alfabetic in caz de egalitate, apeland functia sortBy cu functia compare_func
+pe matricea obtinuta astfel: transpose (take 2 (transpose (tail m))): tail - 
+fara titlu, transpose - pentru a obtine pe linii liste de nume, pasi, take 2 
+- se doresc doar numele si numarul de pasi, transpose - pentru a obtine o 
+coloana reprezentand numele si una reprezentand numarul de pasi. Se concateneaza 
+la inceputul noii matrici titlul ["Name", "Total Steps"].
+
+Functia compare_func compara 2 elemente de tip Row ([nume, numar_pasi]) astfel: 
+compara mai intai ultimul element de pe linie - numarul de pasi, apoi in caz de 
+egalitate compara primul element de pe linie - numele. 
+
+
+- Task 6: 
+
+Functia get_steps_diff_table creeaza un tabel cu coloanele 
+["Name", "Average first 4h", "Average last 4h", "Difference"], sortat dupa 
+diferenta, apoi in caz de egalitate dupa nume. Astfel, aplica functia sortBy 
+cu functia compare_func (poate fi aplicata - compara initial ultimul element 
+de pe rand, reprezentand diferenta, apoi primul element, reprezentand numele)
+pe noua matrice creata aplicand functia gen_diff pe matricea rezultata in urma
+aplicarii map average4h pe tail de aceasta (fara titlu). 
+
+Functia average4h transforma un rand astfel: pastreaza primul element, 
+reprezentand numele, iar urmatoarele 2 elemente vor fi numarul de mediu de 
+pasi pe primele, respectiv ultimele 4 ore, obtinut cu ajutorul functiei 
+gen_average_steps (take 4 - primele 4, drop 4 - ultimele 4).
+
+Functia gen_diff adauga in tabel coloana corespunzatoare diferentei, apeland 
+functia diff_string, realizand diferenta intre mediile celor 4 ore. 
+
+Functia diff_string returneaza sub forma unui String diferenta, in modul, a 
+celor 2 termeni primiti ca parametru. 
+
+
+- Task 7:
+
+Functia vmap aplica o functie pe fiecare valoare dintr-un tabel, apeland 
+functia map cu functia map f pe matricea data. Astfel, pentru fiecare linie 
+aplica functia map f, adica aplica pe fiecare valoare de pe fiecare linie 
+functia f. 
+
+
+- Task 8: 
+
+Functia rmap aplica functia f data ca parametru pe fiecare linie din tabel 
+(tail m - fara titlu); se concateneaza la inceputul matricii String-ul s dat
+ca parametru reprezentand noul titlu. 
+
+Functia get_sleep_total transforma un rand astfel: pastreaza primul element 
+reprezentand email-ul, urmatorul element de pe linie devenind totalul minutelor
+dormite. 
+
+
+-- TASK SET 2 --
+
+
+- Task 1:
+
+Functia tsort intoarce tabelul primit ca parametru sortat in functie de coloana 
+primita ca parametru, pastrand titlul tabelului (numele coloanelor) si aplicand 
+functia sortBy pe restul tabelului (fara titlu) cu functia parametru 
+compareByColumn. Aceasta functie compara 2 elemente de tip Row astfel: daca 
+elementele de pe coloana data sunt diferite se sorteaza crescator dupa acestea, 
+altfel se sorteaza crescator dupa elementul de pe prima coloana. Pentru a obtine
+elementul de la coloana respectiva se obtine index-ul corespunzator acestei 
+coloane cu ajutorul functiei getColIndex. 
+
+Functia getColIndex intoarce index-ul corespunzator coloanei primite ca
+parametru din tabelul dat, cautand in titlul acestuia. Se traverseaza acest rand
+cu un index initial 0 (incrementat la fiecare apel), returnand-ul in momentul in 
+care valoarea de la acest index devine egala cu coloana data. In cazul in care
+coloana data nu exista in tabel index-ul va depasi numarul de coloane existente 
+si se va returna -1. 
+
+Functia compareElem compara 2 String-uri, astfel: daca cele 2 String-uri sunt 
+numere atunci acestea se compara dupa transformarea acestora in Float (prin 
+intermediul functiei string_to_float), in caz contrar se compara acestea ca 
+String-uri.
+
+Functia isNum verifica daca String-ul primit ca parametru este un numar valid 
+(Float) cu ajutorul functiei ReadMaybe :: Maybe Float. Aceasta intoarce Nothing 
+daca String-ul dat ca parametru acesteia nu este un Float, deci functia isNum 
+intoarce True daca String-ul dat poate fi numar, respectiv False daca este 
+doar un String. 
+
+
+- Task 2:
+
+Functia vunion adauga la sfarsitul primului tabel primit ca parametru pe cel 
+de-al doilea daca titlurile acestora coincid, altfel primul tabel ramane 
+neschimbat.
+
+
+- Task 3:
+
+Functia hunion extinde fiecare rand din primul tabel cu un rand din cel de-al 
+doilea tabel. Daca unul dintre tabele contine mai putine randuri decat celalalt 
+atunci in locul randului respectiv tabelului mai scurt va fi un rand ce contine
+doar String-ul vid (""). 
+
+Functia nrCol intoarce numarul de coloane dintr-un tabel. 
+
+Functia emptyStrings creeaza un rand plin cu String-uri vide, de lungime data 
+drept parametru.
+
+
+- Task 4:
+
+Functia tjoin combina cele 2 tabele in functie de coloana primita ca parametru 
+astfel: unifica mai intai titlurile celor 2 apeland functia mergeHeaders, apoi 
+pentru fiecare linie din primul tabel, daca valoarea de la index-ul corespunzator 
+coloanei date (obtinut cu ajutorul functiei getColIndex) se regaseste si in cel 
+de-al doilea tabel, la index-ul corespunzator coloanei date, atunci se combina 
+cele 2 randuri, cu ajutorul functiei mergeCol ale carei parametri vor fi 
+linia curenta din primul tabel (in fata careia se adauga si titlul tabelului)
+si linia din cel de-al doilea tabel in care se regaseste valoarea de la 
+coloana data din prima linie, obtinuta cu ajutorul functiei getFromTable 
+(in fata careia se adauga si titlul tabelului). In cazul in care valoarea 
+de la coloana data din linia curenta nu se regaseste si in cel de-al doilea 
+tabel, atunci se omite aceasta linie. 
+
+Functia mergeHeaders combina 2 randuri, adaugand primului rand acele elemente 
+din cel de-al doilea rand care nu se regasesc si in primul. 
+
+Functia mergeCol combina 2 linii, primind ca parametru 2 tabele cu cate 
+2 randuri, in care prima linie este titlul tabelului (coloanele acestuia), 
+iar ultima linie este linia asupra careia se va realiza combinarea. Se 
+obtin numele coloanelor in urma combinarii celor 2 linii (apeland functia 
+mergeHeaders cu parametrii titlurile celor 2 tabele), apoi se parcurg 
+aceste coloane cu un index pentru a lua valoarea corespunzatoare fiecareia: 
+daca coloana curenta exista in ambele tabele, iar valoarea din cel de-al 
+doilea tabel nu este String-ul vid ("") atunci se ia valoarea din al 
+doilea tabel, altfel, din primul. Valorile corespunzatoare unei coloane 
+se obtin cu ajutorul functiei getFromRow. Aceasta functie primeste drept 
+parametri tabele de 2 randuri, cu prima linie titlul acestora, pentru a 
+putea lua valoarea corespunzatoare unei coloane dintr-o linie. 
+
+Functia isInTable primeste o valoare, un index si un tabel si verifica daca 
+in tabel exista o linie in care valoarea de la index-ul dat este egala cu 
+valoarea primita ca parametru, cu ajutorul functiei getFromTable. 
+
+Functia getFromTable primeste o valoare, un index si un tabel si intoarce 
+din tabel linia in care valoarea de la index-ul dat este egala cu cea data 
+ca parametru. Daca nu exista o astfel de linie atunci se intoarce un rand 
+vid ([]). 
+
+Functia getFromRow, aplicata unui tabel cu 2 randuri, in care primul rand este 
+titlul tabelului, intoarce valoarea corespunzatoare coloanei primita ca parametru,
+obtinand index-ul corespunzator acestei coloane prin intermediul functiei 
+getColIndex.
+
+
+- Task 5:
+
+Functia cartesian realizeaza produsul cartezian intre 2 tabele, aplicand functia 
+primita ca parametru. Se intoarce un nou tabel cu titlul cel dat drept parametru, 
+randurile acestuia fiind obtinute astfel: pentru fiecare linie din primul tabel 
+se aplica functia data cu toate liniile din al doilea tabel, apeland functia 
+productRow.
+
+Functia productRow primeste o functie, un rand si un tabel si intoarce tabelul 
+in care liniile sale sunt obtinute aplicand functia data pe randul dat si pe 
+fiecare rand din tabelul dat. 
+
+
+- Task 6:
+
+Functia projection extrage din tabelul dat coloanele date astfel: trece prin 
+fiecare din aceste coloane si obtine linia corespunzatoare acesteia, apeland 
+functia getCol. Tabelul final va fi transpus, intrucat se extrag liniile 
+corespunzatoare unei coloane (din tabelul transpus - functia getCol).
+
+Functia getCol intoarce dintr-un tabel linia corespunzatoare coloanei date 
+ca parametru (pentru a extrage o linie se transpune tabelul), apeland functia 
+getColIndex. 
+
+
+- Task 7:
+
+Functia filterTable extrage dintr-un tabel doar acele linii pentru care conditia 
+data se aplica asupra valorii de la coloana data astfel: pastreaza titlul 
+tabelului, apoi, pentru fiecare linie din tabel verifica daca se aplica conditia
+data asupra valorii de la coloana data (valoarea se extrage prin index-ul obtinut
+cu ajutorul functiei getColIndex) si pastreaza aceasta linie in caz pozitiv. In 
+caz contrar, se omite linia.
+
+
+-- TASK SET 3 --
+
 
 - Task 1:
 
