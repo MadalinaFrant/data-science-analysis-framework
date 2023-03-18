@@ -1,0 +1,120 @@
+Etapa 3 proiect PP - Frant Madalina 324CB 
+
+- Task 1:
+
+Pentru a putea aplica aplica functiile implementate pe un QResult (Query dupa 
+eval devine QResult) se foloseste functia toTable care transforma un QResult 
+intr-un Table. Un QResult poate fi de tipul Table t, caz in care functia returneaza 
+tabelul t, sau poate fi de tipul List l, caz in care se se returneaza transpose [l],
+pentru a crea din lista un tabel cu o singura coloana.
+
+Se inroleaza Query in clasa Eval, tratand fiecare constructor de date conform 
+enuntului. In cazul unui Query acesta este mai intai evaluat, apoi este transformat 
+intr-un Table pentru a putea aplica functiile necesare asupra acestuia. Se 
+folosesc functii implementate la etapele anterioare (taskset 1 & 2). 
+
+
+- Task 2:
+
+Se inroleaza Float si String in clasa FEval in mod asemanator, singura diferenta 
+fiind data de faptul ca in cazul unui Float se apeleaza functia string_to_float 
+pe String-ul dat pentru a putea realiza comparatii corecte intre 2 numere. Se 
+trateaza fiecare constructor din FilterCondition conform enuntului. Este folosita 
+functia getColIndex pentru a obtine index-ul corespunzator unei coloane date. 
+
+
+- Task 3:
+
+Se inroleaza si constructorul de tip Filter cond query din Query in clasa Eval, 
+returnand un Table pe care se aplica functia filter cu conditia rezultata in 
+urma evaluarii prin feval. Se aplica filter pe tail de tabelul rezultat in urma 
+evaluarii prin eval, pentru a nu aplica si pe titlul tabelului, acesta fiind 
+adaugat la inceputul tabelului rezultat. 
+
+
+- Task 4:
+
+Se inroleaza si constructorul de tip Graph edgeop query din Query in clasa Eval,
+returnand un Table reprezentand graful creat, construit cu ajutorul functiei 
+genGraph (apelata pe tail de tabelul rezultat in urma evaluarii, pentru a nu lua 
+in considerare si titlul tabelului, iar noul titlu al tabelului reprezentand graful 
+va fi ["From", "To", "Value"], conform enuntului).
+
+Functia genGraph construieste un Table reprezentand un graf dintr-un Table 
+dat, folosind functia de generare a unei muchii data edgeop. Se traverseaza 
+tabelul dat cu 2 indecsi (i si j - folosind functiile auxiliare for_i si for_j).
+Pentru fiecare i de la 0 la lungimea tabelului (traversare prin tot tabelul) se 
+verifica pentru fiecare j de la (i + 1) la lungimea tabelului daca exista muchie 
+intre nodul reprezentat de i si cel de j. Daca exista muchie, se adauga intrarea 
+corespunzatoare in tabelul ce va fi returnat, dupa modelul ["nod1", "nod2", "muchie"],
+nodurile fiind sortate crescator. Inainte de a adauga intrarea generata, se verifica 
+daca aceasta exista deja in tabelul ce va fi returnat (acc_i ++ acc_j - se cauta atat 
+in acumulatorul principal, dupa i, cat si in acumulatorul dupa j intrucat poate 
+exista in acumulatorul dupa j, care nu a fost inca adaugat la acumulatorul dupa i), 
+caz in care nu se mai adauga din nou. 
+
+
+- Task 5:
+
+Pentru a obtine Query-ul cerut in enunt, se creeaza secvential un Query astfel:
+Intrucat nu se doresc intrari in care lipseste numele (este ""), se aplica 
+Filter (FNot (Eq "Name" "")) pentru a elimina aceste intrari. Apoi, se creeaza 
+un graf din tabelul rezultat, aplicand Graph edge <tabel_rezultat>, functia 
+edge reprezentand muchia intre 2 noduri fiind definita astfel: distanta intre 
+numarul de pasi intre 2 utilizatori, calculata folosind functia distance.
+
+Functia distance calculeaza distanta ceruta astfel: se parcurg ambele linii 
+reprezentand numarul de pasi pe ore de catre cei 2 utilizatori cu un index, 
+incrementand distanta (numarul de ore pentru care valorile sunt egale) in cazul
+unor valori egale pentru index-ul curent. 
+
+Tabelul reprezentand graful rezultat este apoi filtrat pentru a contine 
+numai intrari in care valoarea muchiei este >= 5, aplicand 
+Filter (FNot (Lt "Value" (string_to_float "5"))) <graf_rezultat>, pastrand 
+astfel doar intrarile ce respecta conditia enuntata. In final se sorteaza 
+tabelul rezultat dupa coloana reprezentata de "Value".
+
+
+- Task 6: 
+
+Functia correct_table corecteaza tabelul dat astfel: extrage din cele 2 tabele 
+primite drept parametru coloana corespunzatoare, apeland functia getCol cu 
+primul parametru numele coloanei cu typo-uri. Astfel, se retine in typos coloana
+cu typo-uri si in ref coloana de referinta (fara typo-uri). Se filtreaza apoi 
+valorile din cele 2 coloane care nu exista in cealalta coloana, pentru a obtine 
+doar valorile ce contin typo-uri si valorile corecte ale acestor valori. Deoarece 
+apeland Filter se obtine un tabel, se vor retine in typos' si ref' tabelele 
+intoarse de acesta sub forma unei liste. Astfel, typos' este o lista ce contine 
+doar valorile cu typo-uri, iar ref' o lista ce contine valorile corecte 
+corespunzatoare acestor typo-uri. Se retine in index index-ul coloanei cu typo-uri. 
+Pentru a crea tabelul corect se procedeaza astfel: se trece prin fiecare linie 
+a tabelului, verificand daca valoarea de la index-ul corespunzator coloanei cu 
+typo-uri este un typo (daca exista in lista typos'); daca da, se adauga in tabelul
+ce va fi returnat linia modificata cu ajutorul functiei replace; daca nu este un 
+typo, se adauga linia nemodificata. 
+
+Functia replace primeste un index corespunzator coloanei cu typo-uri, o lista 
+cu valorile corecte corespunzatoare typo-urilor si o linie. Se parcurge linia 
+cu un index, adaugand la noua linie ce va fi returnata, daca index-ul curent 
+nu este egal cu index-ul coloanei cu typo-uri, valoarea de la index-ul curent, 
+nemodificata, respectiv daca index-ul curent este egal cu cel primit, cea mai 
+potrivita valoare a typo-ului din linia cu valori corecte, folosind functia 
+bestMatch. 
+
+Functia bestMatch primeste un String si o lista de String-uri si intoarce 
+valoarea cea mai apropiata de String-ul dat din lista, adica valoarea cu cea 
+mai mica distanta intre aceasta si String-ul dat, typo. Initial se considera 
+cea mai potrivita valoare primul element din lista de valori corecte, apoi se 
+trece prin toate elementele listei, comparand distanta dintre acestea si 
+String-ul typo si retinand valoarea cu cea mai mica distanta fata de acesta. 
+
+Functia distanceTypos calculeaza distanta intre 2 String-uri (distanta mai mare 
+- String-uri mai diferite, distanta mai mica - String-uri mai asemanatoare), 
+folosind algoritmul Levenshtein. Deoarece o abordare recursiva ar avea o 
+complexitate foarte mare, se abordeaza tehnica de programare dinamica. Astfel, 
+se creeaza o matrice dp de dimensiune dp[lungimeString1][lungimeString2], 
+rezultatul final aflandu-se la indecsii lungimeString1, lungimeString2. Este 
+implementat algoritmul conform definitiei. In vederea implementarii acestei 
+functii au fost folosite drept sursa de inspiratie definitia algoritmului 
+Levenshtein, idei de implementari ale acestuia folosind programare dinamica 
+si cursul de lazy dynamic programming. 
